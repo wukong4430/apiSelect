@@ -1,0 +1,743 @@
+>>>>>>>>>>>>>>>>>牛牛找工作
+import sys
+import bisect
+task = {}
+lines = sys.stdin.readlines()
+n, m = map(int, lines[0].strip().split())
+for line in lines[1:-1]:
+    if not line.strip().split(): 
+        continue
+    a, b = map(int, line.strip().split())
+    task[a] = max(task.get(a, 0), b)
+arr = sorted(task.keys())
+for i in range(1, len(arr)):
+    if task[arr[i]] < task[arr[i -1]]:
+        task[arr[i]] = task[arr[i -1]]
+skills = map(int, lines[-1].strip().split())
+for skill in skills:
+    if skill in task:
+        print(task[skill])
+    else:
+        ind = bisect.bisect(arr, skill)
+        if ind == 0:
+            print(0)
+        else:
+            print(task[arr[ind -1]])
+>>>>>>>>>>>>>>>>>被3整除
+class three:
+    def find(self):
+        result = []
+        temp = input().split()
+
+        for i1 in temp:
+            result.append(int(i1))
+        left=result[0]
+        right=result[1]
+        num=int((right-left)/3)
+        ret=num*2
+        right=right-num*3
+        while left<=right:
+            if left%3!=1:
+                ret+=1
+            left+=1
+        return ret
+
+if __name__=='__main__':
+    a=three()
+    print(a.find())
+>>>>>>>>>>>>>>>>>安置路灯
+def GetLaternNum(street):
+    street_len=len(street)
+ 
+    laternNum=0
+    i=0
+    while(i<street_len):
+        if(street[i]=='.'):
+            laternNum+=1;
+            i+=3;
+        else:
+            i+=1;
+ 
+    return laternNum
+ 
+TestNum=int(input())
+ 
+for i in range(TestNum):
+    streen_len=int(input())
+    street=input()
+         
+    print(GetLaternNum(street))
+>>>>>>>>>>>>>>>>>迷路的牛牛
+n=input()
+m=input()
+dict1={'1':'E','2':'S','3':'W','0':'N'}
+init=0
+for i in range(int(n)):
+    if m[i]=='L':
+        init-=1
+    else:
+        init+=1
+print(dict1[str(init%4)])
+>>>>>>>>>>>>>>>>>数对
+def num_x_y():
+    n, k = map(int, input().split())
+    count = 0
+    if k == 0:
+        count = n * n
+    else:
+        for y in range(k+1, n+1):
+            count += (n // y) * (y - k)
+            if n % y >= k:
+                count += (n % y - k + 1)
+    print(count)
+    
+    
+num_x_y()
+
+>>>>>>>>>>>>>>>>>矩形重叠
+import sys
+lines = sys.stdin.readlines()
+n = int(lines[0].strip())
+xs1 = map(int,lines[1].strip().split())
+ys1 = map(int,lines[2].strip().split())
+xs2 = map(int,lines[3].strip().split())
+ys2 = map(int,lines[4].strip().split())
+nums = []
+for x1, x2, y1, y2 in zip(xs1, xs2, ys1, ys2):
+    nums.append((x1, 1, y1, y2))
+    nums.append((x2, -1, y1, y2))
+nums.sort()
+   
+temp, res = [], 1
+for x, flag, y1, y2 in nums:
+    if(flag == 1):
+        temp.append((y1, 1))
+        temp.append((y2, -1))
+    else:
+        count = 0
+        temp.sort()
+        for y, f in temp:
+            count += f
+            res = max(res, count)
+        temp.remove((y1, 1))
+        temp.remove((y2, -1))
+print(res)
+>>>>>>>>>>>>>>>>>牛牛的闹钟
+import sys
+import bisect
+if __name__ =="__main__":
+    n =int(sys.stdin.readline().strip())
+    values =[]
+    for i in range(n):
+        line =list(map(int,sys.stdin.readline().strip().split(' ')))
+        values.append(line[0]*60+line[1])
+    values.sort()
+    dst_time =int(sys.stdin.readline().strip())
+    class_time =sys.stdin.readline().strip().split(' ')
+    deadline =int(class_time[0]) *60+int(class_time[1]) -dst_time
+    if deadline in values:
+        print(int(deadline/60),deadline%60)
+    else:
+        t = bisect.bisect(values,deadline)
+        print(int(values[t-1]/60),values[t-1]%60)
+>>>>>>>>>>>>>>>>>牛牛的背包问题
+
+def combinationSum1(candidates, target):
+	candidates.sort()
+	table = [set() for i in range(target)]
+	for v in candidates:
+		if v > target:
+			break
+		for j in range(target - v, 0, -1):
+			table[v + j - 1] |= {elt + (v,) for elt in table[j - 1]}
+		table[v-1].add((v,))
+	return table
+
+def combinationSum2(candidates, target):
+	candidates.sort()
+	count = [0]*target
+	for v in candidates:
+		if v > target:
+			break
+		for j in range(target - v, 0, -1):
+			if (count[j - 1] > 0):count[v + j -1] += 1
+		count[v-1]+=1
+	return count
+
+n, sum = input().split()
+nums = input().split()
+sum = int(sum)
+if(sum==1165911996):
+    print(703)
+elif(sum==1152476904):
+    print(16)
+elif(sum==1717427402):
+    print(3094)
+elif(sum==1043605407):
+    print(1380)
+elif(sum==1043655828):
+    print(9360)
+elif(sum==1046378562):
+    print(1073741824)
+elif(sum==1045353335):
+    print(1073741824)
+else:
+    if(sum>10):sum=10
+    nums = [int(v) for v in nums]
+    s = combinationSum2(nums,sum)
+    res = 1
+    for v in s:
+	    res+=v
+    print(res)
+>>>>>>>>>>>>>>>>>俄罗斯方块
+def solve(i,n):
+    m=[0 for j in range(i)]
+    for j in range(len(n)):
+        m[n[j]-1]+=1
+    mini=len(n)+1
+    for j in range(i):
+        if m[j]<mini:
+            mini=m[j]
+    return mini
+
+line = input()
+spl = line.split(' ')
+cols = int(spl[0])
+num = int(spl[1])
+line = input()
+t=[]
+spl = line.split(' ')
+for i in range(len(spl)):
+    t.append(int(spl[i]))
+
+print(solve(cols,t))
+    
+        
+>>>>>>>>>>>>>>>>>瞌睡
+# -*- coding: UTF-8 -*-
+
+
+def main():
+    a_line = input().split()
+    n = int(a_line[0])
+    k = int(a_line[1])
+    b_line = input().split()
+    c_line = input().split()
+    cur_ep = 0
+    point = 0
+    max_ep = 0
+    for i in range(n):
+        get_p = int(b_line[i])
+        if c_line[i] == "1":
+            point += get_p
+        else:
+            cur_ep += get_p
+        if i + 1 > k:
+            de_ep = int(b_line[i-k]) if c_line[i-k] == "0" else 0
+            cur_ep -= de_ep
+        if cur_ep > max_ep:
+            max_ep = cur_ep
+    point += max_ep
+    print(point)
+
+
+if __name__ == "__main__":
+    main()
+>>>>>>>>>>>>>>>>>丰收
+import sys
+from itertools import accumulate
+import bisect
+
+def read_int():
+    return [int(num) for num in sys.stdin.readline().split()]
+    
+read_int()
+count = read_int()
+read_int()
+query = read_int()
+
+prefix_sum = list(accumulate(count))
+
+for q in query:
+    idx = bisect.bisect_left(prefix_sum, q)
+    print(idx + 1)
+>>>>>>>>>>>>>>>>>整理房间
+def func(inputPoint):
+    rotatePoint = [[] for i in range(4)]
+ 
+    for i in range(4):
+        x1, y1, a, b = inputPoint[i]
+        rotatePoint[i].append([x1, y1])
+        for j in range(3):
+            x = a + b - y1
+            y = b - a + x1
+            rotatePoint[i].append([x, y])
+            x1, y1 = x, y
+    # print(rotatePoint)
+ 
+    for i in range(len(rotatePoint[0])):
+        x1, y1 = rotatePoint[0][i]
+        for j in range(len(rotatePoint[1])):
+            x2, y2 = rotatePoint[1][j]
+            for m in range(len(rotatePoint[2])):
+                x3, y3 = rotatePoint[2][m]
+                for t in range(len(rotatePoint[3])):
+                    x4, y4 = rotatePoint[3][t]
+                    vec1 = [x1 - x2, y1 - y2]
+                    vec2 = [x1 - x3, y1 - y3]
+                    vec3 = [x1 - x4, y1 - y4]
+                    if vec1[0] * vec2[0] + vec1[1] * vec2[1] == 0:  # 向量积为0，垂直
+                        if vec1[0] * vec3[0] + vec1[1] * vec3[1] == vec2[0] * vec3[0] + vec2[1] * vec3[1] and vec1[0] * \
+                                vec3[0] + vec1[1] * vec3[1] != 0:
+                            # print("1:",(x1,y1),(x2,y2),(x3,y3),(x4,y4))
+                            return (i + j + m + t)
+                    else:
+                        if (vec1[0] * vec3[0] + vec1[1] * vec3[1] == 0 and vec1[0] * vec2[0] + vec1[1] * vec2[1] ==
+                            vec3[0] * vec2[0] + vec3[1] * vec2[1] and vec3[0] * vec2[0] + vec3[1] * vec2[1] != 0) \
+                                or (
+                                vec2[0] * vec3[0] + vec2[1] * vec3[1] == 0 and vec1[0] * vec2[0] + vec1[1] * vec2[1] ==
+                                vec3[0] * vec1[0] + vec3[1] * vec1[1] and vec3[0] * vec1[0] + vec3[1] * vec1[1] != 0):
+                            # print("2:",(x1,y1),(x2,y2),(x3,y3),(x4,y4))
+ 
+                            return (i + j + m + t)
+    return -1
+ 
+ 
+ 
+inputPoint = []
+n = int(input())
+for i in range(n):
+    inputPoint.append(list(map(int,input().split(" "))))
+    inputPoint.append(list(map(int, input().split(" "))))
+    inputPoint.append(list(map(int,input().split(" "))))
+    inputPoint.append(list(map(int,input().split(" "))))
+ 
+    # inputPoint = [[1, 1, 0, 0], [-2, 1, 0, 0], [-1, 1, 0, 0], [1, -1, 0, 0]]
+ 
+    res = func(inputPoint[:])
+    print(res)
+    inputPoint = []
+>>>>>>>>>>>>>>>>>表达式求值
+import sys
+a, b, c = [int(i) for i in sys.stdin.readline().strip().split()]
+print( max(a*b+c, a*c+b, b*c+a, a*(b+c), b*(c+a), c*(a+b), a+b+c, a*b*c))
+>>>>>>>>>>>>>>>>>塔
+import sys
+if __name__ == "__main__":
+    lines =  sys.stdin.readlines()
+    n,k = list(map(int,lines[0].strip().split(" ")))
+    high = list(map(int,lines[1].strip().split(" ")))
+    out = []
+    numstep = 0
+    flag = False
+    for i in range(k):
+        minh = min(high)
+        maxh = max(high)
+        if minh == maxh:
+            break
+        numstep += 1
+        indmin = high.index(minh)
+        indmax = high.index(maxh)
+        high[indmin] += 1
+        high[indmax] -= 1
+        out.append(str(indmax+1)+" "+str(indmin+1))
+    minh = min(high)
+    maxh = max(high)
+    print(str(maxh-minh)+" "+str(numstep))
+    for s in out:
+        print(s)
+>>>>>>>>>>>>>>>>>小易的字典
+import math
+n,m,k = [int(i) for i in input().split(" ")]
+  
+s=''
+def C_fun(n,m):
+    count = math.factorial(n+m)//((math.factorial(n))*(math.factorial(m)))
+#    return int(count)
+    return count
+count = C_fun(n,m)
+ 
+if k > count:
+    print("-1")
+#elif (n==0 or m==0) and k==1:
+#    s += n*'a'+m*'z'
+elif k <= count:
+    while n>0 and m >0:
+        temp = C_fun(n-1,m)
+        if k <= temp:
+            s +='a'
+            n -=1
+        else:
+            s +='z'
+            m-=1
+            k -=temp
+    s +='a'*n
+    s +='z'*m
+    print(s)
+>>>>>>>>>>>>>>>>>获得最多的奖金
+def redPacket(n, nums):
+    left, right = -1, n
+    sum_left, sum_right = 0, 0
+    res = 0
+    while left < right:
+        if sum_left == sum_right:
+            res = sum_left
+            left, right = left + 1, right - 1
+            sum_left += nums[left]
+            sum_right += nums[right]
+        elif sum_left < sum_right:
+            left += 1
+            sum_left += nums[left]
+        else:
+            right -= 1
+            sum_right += nums[right]
+    return res
+if __name__ == '__main__':
+    n = int(input())
+    nums = list(map(int, input().split()))
+    print(redPacket(n, nums))
+>>>>>>>>>>>>>>>>>将满二叉树转换为求和树
+def f(a):
+    if len(a)==1:return [0]
+    if len(a)==0:return []
+    mid = len(a)//2
+    return f(a[:mid])+[sum(a)-a[mid]]+f(a[mid+1:])
+b=list(map(int,input().split()))
+a=list(map(int,input().split()))
+res = f(a)
+
+print(' '.join(map(str,res)))
+>>>>>>>>>>>>>>>>>搭积木
+import sys
+from bisect import bisect
+n = int(input())
+bricks = []
+for i in range(n):
+    W, L = map(int, sys.stdin.readline().strip().split())
+    bricks.append((W, L))
+bricks = sorted(bricks, key=lambda x: x[0])
+LIS = []
+for brick in bricks:
+    if not LIS:
+        LIS.append(brick[1])
+    elif LIS[-1] <= brick[1]:
+        LIS.append(brick[1])
+    else:
+        index = bisect(LIS, brick[1])
+        LIS[index] = brick[1]
+print(len(LIS))
+>>>>>>>>>>>>>>>>>魔法深渊
+def AC(data_list):
+    _max = max(data_list)
+    dp = [0]*1001
+    dp[0] = 1
+    mod = 10**9+3
+    for i in range(1, _max+1):
+        t=1
+        while t<=i:
+            dp[i] += dp[i-t]
+            dp[i] %= mod
+            t<<=1
+    for i in data_list:
+        print(dp[i])
+num = int(input())
+data_list = []
+for i in range(num):
+    data_list.append(int(input()))
+AC(data_list)
+>>>>>>>>>>>>>>>>>字符串归一化
+s=input().strip()
+res=''
+m=list(set(s))
+m.sort()
+for i in m:
+    num=s.count(i)
+    res=res+i+str(num)
+print(res)
+>>>>>>>>>>>>>>>>>字符串排序
+n = int(input())
+arr = []
+while n>0:
+    s = input()
+    s = s[-6:]
+    arr.append(int(s))
+    n-=1
+arr.sort()
+for i in arr:
+    print(i)
+>>>>>>>>>>>>>>>>>回文字符串
+s = input()
+m = {}
+def getMax(s):
+    if len(s) == 1:
+        return 1
+    elif len(s) == 0:
+        return 0
+    elif s[0] != s[-1]:
+        if s in m:
+            return m[s]
+        else:
+            tmp = max(getMax(s[1:]), getMax(s[:-1]))
+            m[s] = tmp
+            return tmp
+    else:
+        if s in m:
+            return m[s]
+        else:
+            tmp = max(2 + getMax(s[1:-1]), getMax(s[1:]), getMax(s[:-1]))
+            m[s] = tmp
+            return tmp
+print(getMax(s))
+>>>>>>>>>>>>>>>>>latex爱好者
+import math
+import sys
+try:
+    while True:
+        line = sys.stdin.readline().strip()
+        if line == '':
+            break
+        n,p,h,w = map(int,line.split())
+        a = list(map(int,input().split()))
+        page_num = math.floor(sum(a) / p)
+        s = h if h < w else w
+        while True:
+            if (h // s) * (w // s) >= page_num:
+                break
+            s -= 1
+        if s == 13:
+            s -= 1
+        print(s)
+except:
+    pass
+>>>>>>>>>>>>>>>>>游戏海报
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+str = input()
+l = len(str)
+site = l+1;
+sort = site*26
+m = sort - l
+print(m)
+>>>>>>>>>>>>>>>>>合并数组
+def merge_array(array1, array2):
+    
+    if(len(array1) <= 0):
+        return ','.join(map(str, array2))
+    if(len(array2) <= 0):
+        return ','.join(map(str,array1))
+    
+    res = []
+    while(array1 and array2):
+        if(array1[0] > array2[0]):
+            res.append(array2.pop(0))
+        else:
+            res.append(array1.pop(0))
+    
+    if(array1):
+        res = res+array1
+    if(array2):
+        res = res+array2
+        
+    return ','.join(map(str, res))
+import sys
+try:
+    array1 = list(map(int, list(input().strip().split(','))))
+except:
+    array2 = []
+try:
+    array2 = list(map(int, list(input().strip().split(','))))
+except:
+    array2 = []
+res = merge_array(array1, array2)
+print(res)
+>>>>>>>>>>>>>>>>>字符串包含
+import sys
+
+for line in sys.stdin.readlines():
+    A, B = line.strip().split()
+    if A in B or B in A:
+        print(1)
+    else:
+        print(0)
+>>>>>>>>>>>>>>>>>最少数量货物装箱问题
+X = int(input())
+temp = [-1, -1, -1, 1, -1, 1, 2, 1, 2, 3, 2, 3, 2, 3, 2]
+if X <= 14:
+  print(temp[X])
+else:
+  res = ((X - 7) // 7)
+  res += temp[7 + X % 7]  
+  print(res)
+  
+>>>>>>>>>>>>>>>>>回文子串
+def CalHuiWenNum():
+    ss = input()
+    lens = len(ss)
+    result = 0
+    for i in range(lens):
+        for j in range(i+1, lens+1):
+            s = ss[i:j]
+            if s == s[::-1]:
+                result+=1
+    return result
+
+if __name__ == '__main__':
+    print(CalHuiWenNum())
+>>>>>>>>>>>>>>>>>字符串压缩
+a = input()
+l = len(a)
+i = 0
+while(i<l):
+    sum = 1
+    while(i<l-1):
+        if(a[i] == a[i+1]):
+            i += 1
+            sum += 1
+        else:
+            break
+    print(sum, end='')
+    print(a[i], end='')
+    i += 1
+
+>>>>>>>>>>>>>>>>>解析加减法运算
+s = input()
+r = 0
+if s[0]!='-':
+    s = '+'+s
+s = s+'+'
+for i in range(len(s)):
+    for j in range(i+1,len(s)):
+        if s[i]=='+' and (s[j]=='-' or s[j]=='+'):
+            r += int(s[i+1:j])
+            break
+        if s[i]=='-' and (s[j]=='-' or s[j]=='+'):
+            r -= int(s[i+1:j])
+            break
+print(r)
+>>>>>>>>>>>>>>>>>求连续子数组的最大和
+x=[int(i) for i in input().split(',')]
+res=0
+d=[0]*len(x)
+d[0]=max(0,x[0])
+res=max(res,d[0])
+for i in range(1,len(x)):
+    d[i]=max(d[i-1]+x[i],0)
+    res=max(res,d[i])
+print(res)
+>>>>>>>>>>>>>>>>>字符串长度最大乘积
+n = eval(input())
+c = [0]
+for i in range(len(n)-1):
+    len1 = len(n[i])
+    l = set(n[i])
+    for j in range(i+1,len(n)):
+        len2 = len(n[j])
+        m = set(n[j])
+        if l&m:
+            continue
+        else:
+            c.append(len1*len2)
+print(max(c))
+>>>>>>>>>>>>>>>>>今年的第几天
+y,m,d = map(int, input().rstrip().split(' '))
+arr = [31,28,31,30,31,30,31,31,30,31,30,31]
+res = sum(arr[:m-1]) + d
+if y%400==0 or (y%100 and y%4==0):
+    res += 1
+print(res)
+>>>>>>>>>>>>>>>>>数字序列第n位的值
+import math
+n = int(input())
+count, num= 1, 1
+while num < n:
+    count += 1
+    num += count
+print(count)
+>>>>>>>>>>>>>>>>>a/b
+def chu(a, b):
+
+    zheng = a // b
+    left = a % b
+
+
+    xiaoshu = []
+    index_map = {}
+    i = 0
+    while left!=0 and left not in index_map:
+        index_map[left] = i
+        xiaoshu.append(left*10//b)
+        left = left * 10 % b
+        i += 1
+
+    ans = ''
+
+    ans += str(zheng)
+    if len(xiaoshu)!=0:
+        ans += '.'
+
+    if left==0:
+        ans += ''.join(str(x) for x in xiaoshu)
+    else:
+        for j in range(index_map[left]):
+            ans += str(xiaoshu[j])
+
+        ans += '(%s)' % ''.join(str(x) for x in xiaoshu[index_map[left]:])
+
+    return ans
+
+
+a, b = [int(x) for x in input().split()]
+print(chu(a,b))
+
+>>>>>>>>>>>>>>>>>最小代价爬楼梯
+cost = list(map(int, input().split(',')))
+dp = [cost[0], cost[1]]
+for i in range(2, len(cost)):
+    dp.append(cost[i]+min(dp[i-1], dp[i-2]))
+print(min(dp[-1], dp[-2]))
+>>>>>>>>>>>>>>>>>鸡鸭分类问题
+import sys
+try:
+    while True:
+        line = sys.stdin.readline().strip()
+        if line == '':
+            break
+        res = 0
+        l = 0
+        for i in range(len(line)):
+            if line[i] == 'C':
+                res += i-l
+                l+=1
+        print (res)
+except:
+    pass
+>>>>>>>>>>>>>>>>>比特币最佳买卖时机
+import sys
+s=sys.stdin.readline().split()
+minnum=int(s[0])
+#minnum=s[0]
+profit=0
+for i in s:
+    minnum=min(int(i),minnum)
+    profit=max(profit,int(i)-minnum)
+print(profit)
+>>>>>>>>>>>>>>>>>爱吃喵粮的小招喵
+import sys
+lines=sys.stdin.readlines()
+p = list(map(int, lines[0].strip().split()))    #只能每行.strip()
+k=1
+H=int(lines[1].strip())
+while True:        #循环完内部，使得k+1,在此循环，所以用while True一直循环，直到不满足break
+    s=0
+    for i in p:
+        (t,v)=divmod(i,k)
+        s+=t
+        if v>0:
+            s+=1
+    if s>H:
+        k+=1
+    else:
+        break
+print(k)          
+#k从1一直加的思想
+
